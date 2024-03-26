@@ -1,0 +1,60 @@
+create table workers(
+    workerid int primary key,
+    workername varchar(20)not null,
+    dept varchar(20)not null,
+    salary int,
+    DOJ datetime not null
+);
+insert into workers values(1,'Anil','Accounts',10000,'01-01-2020');
+insert into workers values(2,'Anu','Admin',11000,'01-10-2020');
+insert into workers values(3,'Anil kumar','HR',5000,'03-11-2020');
+insert into workers values(4,'Anuradh','Marketing',12000,'11-12-2021');
+insert into workers values(5,'Anuradh kumar','Establishment',8000,'01-01-2020');
+insert into workers values(6,'Anoop','Finance',10000,'01-01-1998');
+insert into workers values(7,'Anoop kumar','Stores',9000,'01-01-2001');
+insert into workers values(8,'Adarsh','Security',7000,'01-01-2008');
+--change workername anil kumar to anil prasad
+update workers set workername='Anil prasad' where workername='Anil kumar';
+--change the salary of workers to 5500 whose salary is less than 6000
+update workers set salary=5500 where salary<6000;
+----- Display the worker details drawing max salary
+select *from workers where salary = (select max(salary) from workers);
+----- Display the worker details drawing min salary
+select *from workers where salary = (select min(salary) from workers);
+--display the highest 2 worker salary
+select top 1* from  workers where salary in (select top 2 salary 
+from workers order by salary desc) order by salary;
+select max(salary) as second from workers where salary<(select max(salary) from workers);
+--display oldest worker as per DOJ
+select TOP 1* from workers order by DOJ;
+--display newest worker as per DOJ
+select TOP 1* from workers order by DOJ DESC;
+--Display name of all workers and department in format "Anil is working in Account
+select workername +' is working in '+dept from workers;
+---- Display name of a workers and salary in format “Anil salary is 10000”
+select workername +' salary is ' +cast(salary as varchar(5)) from workers;
+-- sort the worker data based on Salary and then dept
+select workerid,workername,salary,dept,DOJ from workers order by salary,dept;
+-- sort the worker data based on Salary reverse order and then dept in ascending order
+select workerid,workername,salary,dept,DOJ from workers order by salary desc,dept;
+-- Display the first character of all workers
+select left(workername,1) from workers;
+--display whose name ends with S
+select workername from workers where workername like '%S';
+--display workers who are working in Account, Security
+select workername from workers where dept in('accounts','security');
+select workername from workers where dept in('accounts','security');
+-- Display workers who are not working in HR
+select workername from workers where dept  not in('HR');
+---- Display workers whose salary is greater than 8000 and less than 12000
+select workername from workers where salary>8000 and salary<12000;
+-- Display unique departments
+select distinct dept from workers;
+--Display count of all workers
+select count(workerid) from workers;
+-- Display count of workers in each department
+select dept,count(*) from workers group by dept;
+-- Display avg salary for each department
+select dept,avg(salary) as avg_salary from workers group by dept;
+-- Display departments where count of workers is more than 1
+select dept from workers group by dept having count(workerid)>1; 
